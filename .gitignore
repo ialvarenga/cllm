@@ -1,0 +1,18 @@
+# Python package files
+*.egg-info/
+__pycache__/
+*.py[cod]
+*$py.class
+dist/
+build/
+
+# Environment files
+.env
+.venv/
+venv/
+ENV/
+
+# IDE files
+.idea/
+.vscode/
+*.swp
