@@ -52,6 +52,10 @@ class OpenAIClient:
                 response.raise_for_status()
                 return response.json()
         except httpx.HTTPStatusError as e:
+            error_response = e.response.json()
+            if error_response.get("error", {}).get("code") == "model_not_found":
+                console.print(f"[bold red]The model `{model}` does not exist or you do not have access to it.[/bold red]")
+                return {"error": f"The model `{model}` does not exist or you do not have access to it."}
             console.print(f"[bold red]API error ({e.response.status_code}): {e.response.text}[/bold red]")
             return {"error": e.response.text}
         except httpx.RequestError as e:
