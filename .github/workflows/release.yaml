@@ -37,7 +37,7 @@ jobs:
       run: |
         git config --global user.name "github-actions"
         git config --global user.email "action@github.com"
-        semantic-release publish
+        semantic-release publish --noop
       env:
         GH_TOKEN: ${{ secrets.GH_TOKEN }}
         PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
