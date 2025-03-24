@@ -106,15 +106,15 @@ def set_default_thread(thread: str = typer.Argument(..., help="Default thread na
 
 
 @app.command(name="clear-thread")
-def clear_thread(thread: str = typer.Argument(..., help="Nome da thread a ser limpa")) -> None:
-    """Remove o histórico de uma thread específica."""
+def clear_thread(thread: str = typer.Argument(..., help="Thread name to clear")) -> None:
+    """Remove the history of a specific thread."""
     thread_file = Path.home() / ".cllm" / "threads" / f"{thread}.json"
     
     if thread_file.exists():
         thread_file.unlink()
-        console.print(f"[bold yellow]Thread '{thread}' removida com sucesso.[/bold yellow]")
+        console.print(f"[bold yellow]Thread '{thread}' successfully removed.[/bold yellow]")
     else:
-        console.print(f"[red]Thread '{thread}' não encontrada.[/red]")
+        console.print(f"[red]Thread '{thread}' not found.[/red]")
 
 
 @app.command(name="list-config")
@@ -128,11 +128,11 @@ def config_cli() -> None:
 
 @app.command(name="list-threads")
 def list_threads() -> None:
-    """Lista todas as threads salvas localmente."""
+    """List all locally saved threads."""
     threads = thread_manager.list_threads()
     
     if not threads:
-        console.print("[italic]No thread found.[/italic]")
+        console.print("[italic]No threads found.[/italic]")
         return
 
     console.print("[bold green]Available threads:[/bold green]")
