@@ -5,9 +5,19 @@ build-backend = "setuptools.build_meta"
 [tool.semantic_release]
 version_variable = ["cllm/__init__.py:__version__"]
 branch = "main"
+
+[tool.semantic_release.publish]
 upload_to_pypi = true
+
+[tool.semantic_release.build]
 build_command = "python setup.py sdist bdist_wheel"
-commit_parser = "semantic_release.commit_parser.angular_parser"
-commit_subject = "build: release v{version}"
-commit_author = "github-actions <actions@github.com>"
-tag_format = "v{version}"
+
+[tool.semantic_release.commit_parser]
+type = "angular"
+
+[tool.semantic_release.commit]
+subject = "build: release v{version}"
+author = "github-actions <actions@github.com>"
+
+[tool.semantic_release.tag]
+format = "v{version}"
