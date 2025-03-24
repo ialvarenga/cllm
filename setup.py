@@ -1,5 +1,5 @@
 """
-Setup script para instalar a CLI CLLM.
+Setup script for installing the CLLM CLI.
 """
 from setuptools import setup, find_packages
 import os
@@ -33,6 +33,18 @@ setup(
         "httpx>=0.24.0",
         "python-dotenv>=1.0.0",
     ],
+    extras_require={
+        'dev': [
+            'pytest>=7.3.1',
+            'pytest-asyncio>=0.21.0',
+            'pytest-cov>=4.1.0',
+            'black>=23.3.0',
+            'isort>=5.12.0',
+            'flake8>=6.0.0',
+            'mypy>=1.3.0',
+            'pre-commit>=3.3.2',
+        ]
+    },
     entry_points={
         "console_scripts": [
             "cllm=cllm.cli:main",
@@ -50,4 +62,5 @@ setup(
         "Programming Language :: Python :: 3.11",
     ],
     python_requires=">=3.7",
+    keywords="cli, llm, openai, gpt, chatgpt, chat, conversation",
 )
