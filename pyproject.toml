@@ -1,0 +1,13 @@
+[build-system]
+requires = ["setuptools>=42", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.semantic_release]
+version_variable = ["cllm/__init__.py:__version__"]
+branch = "main"
+upload_to_pypi = true
+build_command = "python setup.py sdist bdist_wheel"
+commit_parser = "semantic_release.commit_parser.angular_parser"
+commit_subject = "build: release v{version}"
+commit_author = "github-actions <actions@github.com>"
+tag_format = "v{version}"
