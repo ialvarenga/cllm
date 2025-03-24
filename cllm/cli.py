@@ -132,10 +132,10 @@ def list_threads() -> None:
     threads = thread_manager.list_threads()
     
     if not threads:
-        console.print("[italic]Nenhuma thread encontrada.[/italic]")
+        console.print("[italic]No thread found.[/italic]")
         return
 
-    console.print("[bold green]Threads disponíveis:[/bold green]")
+    console.print("[bold green]Available threads:[/bold green]")
     for thread in threads:
         console.print(f"• {thread}")
 
