@@ -11,7 +11,7 @@ build_command = "python setup.py sdist bdist_wheel"
 
 [tool.semantic_release.commit]
 subject = "build: release v{version}"
-author = "github-actions <actions@github.com>"
+author = "github-actions <action@github.com>"
 
 [tool.semantic_release.tag]
 format = "v{version}"
