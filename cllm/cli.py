@@ -13,6 +13,7 @@ from rich.progress import Progress
 from rich.prompt import Prompt
 
 from cllm.utils.config import Config
+from cllm.utils.thread_manager import ThreadManager
 
 app = typer.Typer(
     name="cllm",
@@ -21,6 +22,7 @@ app = typer.Typer(
 )
 console = Console()
 config = Config()
+thread_manager = ThreadManager(config)
 
 
 @app.command()
@@ -54,13 +56,8 @@ async def _ask_async(
     client = OpenAI(api_key=api_key)
 
     thread_id = thread_id or config.get("default_thread", "default")
-    thread_path = Path.home() / ".cllm" / "threads"
-    thread_path.mkdir(parents=True, exist_ok=True)
-    thread_file = thread_path / f"{thread_id}.json"
-
-    history = []
-    if thread_file.exists():
-        history = json.loads(thread_file.read_text())
+    #TODO use sqlite to store the thread history, and use transactions
+    history = thread_manager.load_history(thread_id)
 
     history.append({"role": "user", "content": message})
 
@@ -80,7 +77,7 @@ async def _ask_async(
             
             history.append({"role": "assistant", "content": reply})
             
-            thread_file.write_text(json.dumps(history, indent=2))
+            thread_manager.save_history(history, thread_id)
             
             if markdown:
                 md = Markdown(reply)
@@ -91,6 +88,9 @@ async def _ask_async(
         except Exception as e:
             progress.remove_task(task)
             error_message = str(e)
+            # TODO be more specif about the errors, and treat them properly
+            # Remove the user's message from history since the request failed
+            history.pop()
             
             if "does not exist" in error_message and "model" in error_message:
                 console.print(f"[bold red]The model `{model}` does not exist or you do not have access to it.[/bold red]")
@@ -129,21 +129,15 @@ def config_cli() -> None:
 @app.command(name="list-threads")
 def list_threads() -> None:
     """Lista todas as threads salvas localmente."""
-    thread_path = Path.home() / ".cllm" / "threads"
-    
-    if not thread_path.exists():
-        console.print("[italic]Nenhuma thread encontrada.[/italic]")
-        return
-
-    threads = list(thread_path.glob("*.json"))
+    threads = thread_manager.list_threads()
     
     if not threads:
         console.print("[italic]Nenhuma thread encontrada.[/italic]")
         return
 
     console.print("[bold green]Threads disponíveis:[/bold green]")
-    for f in threads:
-        console.print(f"• {f.stem}")
+    for thread in threads:
+        console.print(f"• {thread}")
 
 
 @app.command(name="set-api-key")
